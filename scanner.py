@@ -55,3 +55,29 @@ def scan_ports_threaded(target: str, ports: range, max_workers: int = 100):
     elapsed = time.time() - start_time
     print(f"\nScan completed in {elapsed:.2f} seconds")
     return open_ports
+
+def scan_range(target: str, start_port: int, end_port: int, max_threads: int = 100):
+    """
+    Scan a range of ports using multithreading.
+    """
+    with ThreadPoolExecutor(max_workers=max_threads) as executor:
+        # Create a dictionary mapping futures to port numbers
+        future_to_port = {
+            executor.submit(scan_port, target, port): port 
+            for port in range(start_port, end_port + 1)
+        }
+
+        # Add the scaned ports to the dictionary if they are open
+        for future in as_completed(future_to_port):
+            port = future_to_port[future]
+            try:
+                # if open print "port number is open"
+                if future.result():
+                    print(f"Port {port} is open")
+                # If error occurs print the reason for the error and the port number
+            except Exception as e:
+                print(f"Port {port} generated an exception: {e}")
+
+if __name__ == "__main__":
+    target = input("Enter target IP or hostname: ")
+    scan_range(target, 1, 1024)
