@@ -3,7 +3,7 @@ from concurrent.futures import ThreadPoolExecutor, as_completed
 from functools import partial
 import time
 
-def scan_port(target: str, port: int, timeout: float = 1.0):
+def scan_port(target, port, timeout = 1.0):
     """
     Scan a single port on the target host.
     
@@ -26,7 +26,7 @@ def scan_port(target: str, port: int, timeout: float = 1.0):
     finally:
         sock.close()
 
-def scan_ports_threaded(target: str, ports: range, max_workers: int = 100):
+def scan_ports_threaded(target, ports, max_workers = 100):
     """
     Scan multiple ports using a thread pool.
     """
@@ -56,7 +56,7 @@ def scan_ports_threaded(target: str, ports: range, max_workers: int = 100):
     print(f"\nScan completed in {elapsed:.2f} seconds")
     return open_ports
 
-def scan_range(target: str, start_port: int, end_port: int, max_threads: int = 100):
+def scan_range(target, start_port, end_port, max_threads = 100):
     """
     Scan a range of ports using multithreading.
     """
